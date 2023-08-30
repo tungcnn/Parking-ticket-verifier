@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "H6qUSwQieBeeYGGG3ihIJiR9euDLzckcX4KU20auMhci7/jpBeE0y8ULMFhaHgoZFsYb9GbpX0mzmXjEqIeKkw==",
+  "dgSpecHash": "LI6zaGkrsp/GYIeZIp3S2RJZvDs1IuE0wIcF/1NPt3CEqOcadwIjQfknA8qkNNI4glDAC281vJn+ul7OombTSQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\sontu\\OneDrive\\Documents\\SIT329-Group-5-Image-Processing\\image-to-binary-converter\\image-to-binary-converter.csproj",
+  "projectFilePath": "c:\\Users\\Ninny\\VSCode\\Deakin\\SIT329-Group-5-Image-Processing\\image-to-binary-converter\\image-to-binary-converter.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

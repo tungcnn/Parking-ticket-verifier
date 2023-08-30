@@ -1,0 +1,42 @@
+module BinaryFileProcessor;
+
+    reg [7:0] r_Image_Raw[0:299999]; // Assuming a max of 300000 bytes in the file (700 * 430)
+    reg [7:0] r_Image_Array[0:699][429]; // 700x430 2D array for pixel storage
+    string s_Input_File_Name = "input.bin"; // Name of the input binary file
+    int n_File_IN;
+    int n_File_OUT;
+    int n_Temp;
+    int n_Time = 0;
+
+    initial begin
+
+        n_File_IN = $fopen(s_Input_File_Name, "rb");
+        if (n_File_IN != 0) begin
+            n_Temp = $fread(r_Image_Raw, n_File_IN);
+            $fclose(n_File_IN);
+
+            // Simulate storing data in 2D array
+            repeat (300000) begin
+                //$display("Time %t: Pixel value = %h", n_Time, r_Image_Raw[n_Time]);
+                r_Image_Array[n_Time/430][n_Time%430] = r_Image_Raw[n_Time];
+                n_Time = n_Time + 1;
+            end
+        end
+          
+        // Simulate saving 2D array to output file
+        n_File_OUT = $fopen("output.txt", "w");
+        if (n_File_OUT != 0) begin
+            int i, j = 0;
+            repeat (300000) begin
+                j = j + 1;
+                $fwrite(n_File_OUT, "%b\n", r_Image_Array[i][j]);
+                if (j == 430) begin
+                    j = 0;
+                    i = i + 1;
+                end
+            end
+            $fclose(n_File_OUT);     
+        end
+    end
+
+endmodule

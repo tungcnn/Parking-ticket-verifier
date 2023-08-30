@@ -8,19 +8,23 @@
     "net6.0": []
   },
   "packageFolders": {
-    "C:\\Users\\sontu\\.nuget\\packages\\": {}
+    "C:\\Users\\Ninny\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\sontu\\OneDrive\\Documents\\SIT329-Group-5-Image-Processing\\image-to-binary-converter\\image-to-binary-converter.csproj",
+      "projectUniqueName": "c:\\Users\\Ninny\\VSCode\\Deakin\\SIT329-Group-5-Image-Processing\\image-to-binary-converter\\image-to-binary-converter.csproj",
       "projectName": "image-to-binary-converter",
-      "projectPath": "C:\\Users\\sontu\\OneDrive\\Documents\\SIT329-Group-5-Image-Processing\\image-to-binary-converter\\image-to-binary-converter.csproj",
-      "packagesPath": "C:\\Users\\sontu\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\sontu\\OneDrive\\Documents\\SIT329-Group-5-Image-Processing\\image-to-binary-converter\\obj\\",
+      "projectPath": "c:\\Users\\Ninny\\VSCode\\Deakin\\SIT329-Group-5-Image-Processing\\image-to-binary-converter\\image-to-binary-converter.csproj",
+      "packagesPath": "C:\\Users\\Ninny\\.nuget\\packages\\",
+      "outputPath": "c:\\Users\\Ninny\\VSCode\\Deakin\\SIT329-Group-5-Image-Processing\\image-to-binary-converter\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\sontu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Ninny\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -61,7 +65,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
       }
     }
   }
