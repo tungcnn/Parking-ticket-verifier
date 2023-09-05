@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Test_text_extraction</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BarCode" Version="2023.8.4" />
+    <PackageReference Include="IronOcr" Version="2023.8.34" />
+    <PackageReference Include="OpenCV" Version="2.4.11" />
+  </ItemGroup>
+
+</Project>
