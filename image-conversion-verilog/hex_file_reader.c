@@ -1,112 +1,99 @@
 module hex_file_reader (
   input clk,
   input rst,
-  input startRead,  
-  output read_done  
+  input startRead,
+  output reg readDone,
+  output reg [9:0] RED [0:imageSize-1],
+  output reg [9:0] GREEN [0:imageSize-1],
+  output reg [9:0] BLUE [0:imageSize-1]
 );
 
-
-  parameter ROWS = 102;
-  parameter COLS = 51;
-  parameter imageSize = 5202;
+  parameter ROWS = 985;
+  parameter COLS = 16;
   parameter imageFile = "car.hex";
-  
-  reg [32:0] totalImageMemory [0 : imageSize-1];
-  reg readDoneReg;
-  
-  integer loadedBMP   [0 : imageSize - 1];   
-  integer localPos = 0;
-  
-  integer org_R  [0 : (imageSize/3) - 1];  
-  integer org_G  [0 : (imageSize/3)- 1]; 
-  integer org_B  [0 : (imageSize/3) - 1]; 
 
-initial begin
-$readmemh(imageFile, totalImageMemory, 0, imageSize-1);
-end
-  
+  localparam imageSize = ROWS * COLS;
+
+  reg [6:0] totalImageMemory [0:imageSize-1];
+  reg readDoneReg;
+
+  integer localPos = 0;
+  integer assignColour = 0;
+
+  initial begin
+    $readmemh(imageFile, totalImageMemory, 0, imageSize-1);
+    readDoneReg = 0;
+  end
+
   always @(posedge clk or posedge rst) begin
     if (rst) begin
       // Reset logic here
-      readDoneReg <= 1'b0;
+      readDoneReg <= 0;
+      localPos <= 0;
+      assignColour <= 0;
     end else begin
       // Read logic
       if (startRead) begin
-        for (int i = 0; i < imageSize; i = i + 1) begin
-          loadedBMP[i] = totalImageMemory[i];
+        if (localPos < imageSize) begin
+          RED[assignColour] <= totalImageMemory[localPos];
+          GREEN[assignColour] <= totalImageMemory[localPos + 1];
+          BLUE[assignColour] <= totalImageMemory[localPos + 2];
+          localPos <= localPos + 3;
+          assignColour <= assignColour + 1;
+        end else begin
+          // All data read, set readDone
+          readDoneReg <= 1;
         end
-       
-        for (int i = 0; i < ROWS; i = i + 1) begin
-          for (int j = 0; j < COLS; j = j + 1) begin
-            localPos = i * COLS + j; 
-        
-            // Save Red, Green, and Blue components
-            org_R[localPos] = temp_BMP[localPos * 3 + 0];
-            org_G[localPos] = temp_BMP[localPos * 3 + 1]; 
-            org_B[localPos] = temp_BMP[localPos * 3 + 2]; 
-          end
-        end
-
-      // Set read_done
-        readDoneReg <= 1'b1;
       end else begin
-        // Reset read_done when not reading
-        readDoneReg <= 1'b0;
+        // Reset readDone when not reading
+        readDoneReg <= 0;
       end
     end
   end
-  
-    assign read_done = readDoneReg;
+
+  assign readDone = readDoneReg;
+
 endmodule
 
-// Testbench for verilog module ....................................
+module rgb_data_reader (
+  input clk,
+  input rst,
+  input startRead,
+  output reg readDone,
+  output reg [9:0] RED [0:imageSize-1],
+  output reg [9:0] GREEN [0:imageSize-1],
+  output reg [9:0] BLUE [0:imageSize-1]
+);
 
-module hex_file_reader_tb;
+  parameter ROWS = 985;
+  parameter COLS = 16;
+  parameter imageFile = "car.hex";
 
-  // Inputs
-  reg clk;
-  reg rst;
-  reg startRead;
-  
-  // Outputs
-  wire read_done;
+  localparam imageSize = ROWS * COLS;
 
-  // Instantiate the module
-  hex_file_reader uut (
+  // Wire to connect to the readDone signal in hex_file_reader
+  wire readDone_wire;
+  wire [9:0] RED_wire [0:imageSize-1];
+  wire [9:0] GREEN_wire [0:imageSize-1];
+  wire [9:0] BLUE_wire [0:imageSize-1];
+
+  // Instantiate the hex_file_reader module
+  hex_file_reader reader_inst (
     .clk(clk),
     .rst(rst),
     .startRead(startRead),
-    .read_done(read_done)
+    .readDone(readDone_wire),
+    .RED(RED_wire),
+    .GREEN(GREEN_wire),
+    .BLUE(BLUE_wire)
   );
 
-  // Clock generation
-  always begin
-    #5 clk = ~clk;
-  end
+  // Connect the readDone signal from hex_file_reader
+  assign readDone = readDone_wire;
 
-  // Test scenario
-  initial begin
-    clk = 0;
-    rst = 0;
-    startRead = 0;
-    
-    // Reset the module
-    rst = 1;
-    #10 rst = 0;
-    
-    // Start reading
-    startRead = 1;
-    #100;
-    startRead = 0;
-    
-    // Wait for the read to complete 
-    #1000;
-    
-    // Print the read data and read_done signal
-    $display("read_done = %b", read_done);
-    
-    // End simulation
-    $finish;
-  end
+  // Connect the RED, GREEN, and BLUE signals
+  assign RED = RED_wire;
+  assign GREEN = GREEN_wire;
+  assign BLUE = BLUE_wire;
 
 endmodule
