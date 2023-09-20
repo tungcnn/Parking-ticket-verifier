@@ -1,69 +1,91 @@
 #include <stdio.h>
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <math.h>
 #include <string.h>
 #include <time.h>
 
-int* red;
-int* green;
-int* blue;
+// Define global arrays for RGB values
+unsigned char *red = NULL;
+unsigned char *green = NULL;
+unsigned char *blue = NULL;
 
-#define ROWS 985
-#define COLS 16
+char hexImageFile[] = "./input/HEXFILE.hex";
+int IMAGE_WIDTH = 0;
+int IMAGE_HEIGHT = 0;
 
-#define imageSize ROWS * COLS
-
-int* hex_reader(char* imageFile)
+unsigned char **hex_reader(char *imageFile, int *imageSize)
 {
-    int* image = malloc(imageSize * sizeof(int));
-    FILE * fp;
-
-    fp = fopen(imageFile, "r");
-
-    if(fp == NULL)
+    FILE *hexFileOpen = fopen(imageFile, "r");
+    if (hexFileOpen == NULL)
     {
         printf("Error opening file\n");
         exit(1);
     }
 
-    // assign FP to image array and read in the hex values
-    int i = 0;
-    while(fscanf(fp, "%x", &image[i]) != EOF)
+    // Calculate the number of columns in the file to determine IMAGE_WIDTH
+    char line[100];
+    fgets(line, sizeof(line), hexFileOpen);
+    int cols = strlen(line) / 8; // Assuming each hex value is 8 characters
+
+    // Calculate the number of lines in the file to determine IMAGE_HEIGHT
+    int lines = 0;
+    while (fgets(line, sizeof(line), hexFileOpen) != NULL)
     {
-        i++;
+        lines++;
+    }
+    fclose(hexFileOpen);
+
+    IMAGE_WIDTH = cols;
+    IMAGE_HEIGHT = lines;
+
+    *imageSize = IMAGE_WIDTH * IMAGE_HEIGHT;
+
+    // Allocate memory for the 2D array
+    unsigned char **image = (unsigned char **)malloc(lines * sizeof(unsigned char *));
+    for (int i = 0; i < lines; i++)
+    {
+        image[i] = (unsigned char *)malloc(cols * 3 * sizeof(unsigned char));
     }
 
-    fclose(fp);
+    // Reopen the file to read the hex values and store them in the 2D array
+    hexFileOpen = fopen(imageFile, "r");
+    if (hexFileOpen == NULL)
+    {
+        printf("Error opening file\n");
+        exit(1);
+    }
+
+    for (int i = 0; i < lines; i++)
+    {
+        for (int j = 0; j < cols * 3; j++)
+        {
+            fscanf(hexFileOpen, "%hhu", &image[i][j]); // Use "%hhu" to read as unsigned char
+        }
+    }
+
+    fclose(hexFileOpen);
     return image;
-
 }
 
-int rgb_converter(int* image)
+void rgb_converter(unsigned char **image, int imageSize)
 {
+    red = (unsigned char *)malloc(imageSize * sizeof(unsigned char));
+    green = (unsigned char *)malloc(imageSize * sizeof(unsigned char));
+    blue = (unsigned char *)malloc(imageSize * sizeof(unsigned char));
 
-    red = malloc(imageSize * sizeof(int));
-    green = malloc(imageSize * sizeof(int));
-    blue = malloc(imageSize * sizeof(int));
-
-    int i = 0;
-
-    for (i = 0; i < imageSize; i++)
+    for (int i = 0; i < imageSize; i++)
     {
-        red[i] = (image[i] >> 16) & 0xFF;
-        green[i] = (image[i] >> 8) & 0xFF;
-        blue[i] = (image[i] >> 0) & 0xFF;
+        red[i] = image[i / IMAGE_WIDTH][i % IMAGE_WIDTH * 3];
+        green[i] = image[i / IMAGE_WIDTH][i % IMAGE_WIDTH * 3 + 1];
+        blue[i] = image[i / IMAGE_WIDTH][i % IMAGE_WIDTH * 3 + 2];
     }
-
-    return 1;
 }
 
-int* grey_scale_converter()
+int *grey_scale_converter(int imageSize)
 {
-    int* greyScale = malloc(imageSize * sizeof(int));
+    int *greyScale = (int *)malloc(imageSize * sizeof(int));
 
-    int i = 0;
-
-    for (i = 0; i < imageSize; i++)
+    for (int i = 0; i < imageSize; i++)
     {
         greyScale[i] = (red[i] * 0.3) + (green[i] * 0.59) + (blue[i] * 0.11);
     }
@@ -71,76 +93,73 @@ int* grey_scale_converter()
     return greyScale;
 }
 
-// int* black_and_white_converter(int* greyScale, int imageSize)
-// {
-//     int* blackAndWhite = malloc(imageSize * sizeof(int));
+int *black_and_white_converter(int imageSize)
+{
+    int *blackAndWhite = (int *)malloc(imageSize * sizeof(int));
 
-//     int i = 0;
+    for (int i = 0; i < imageSize; i++)
+    {
+        int greyValue = (red[i] * 0.3) + (green[i] * 0.59) + (blue[i] * 0.11);
 
-//     for (i = 0; i < imageSize; i++)
-//     {
-//         if (greyScale[i] > 127)
-//         {
-//             blackAndWhite[i] = 1;
-//         }
-//         else
-//         {
-//             blackAndWhite[i] = 0;
-//         }
-//     }
+        if (greyValue > 127)
+        {
+            blackAndWhite[i] = 1;
+        }
+        else
+        {
+            blackAndWhite[i] = 0;
+        }
+    }
 
-//     return blackAndWhite;
-// }
+    return blackAndWhite;
+}
 
-// int* inverse_converter(int* red, int* green, int* blue, int imageSize)
-// {
-//     int* inverse_red = malloc(imageSize * sizeof(int));
-//     int* inverse_green = malloc(imageSize * sizeof(int));
-//     int* inverse_blue = malloc(imageSize * sizeof(int));
+void inverse_converter(int imageSize)
+{
+    // Inverse an RGB image
+    for (int i = 0; i < imageSize; i++)
+    {
+        red[i] = 255 - red[i];
+        green[i] = 255 - green[i];
+        blue[i] = 255 - blue[i];
+    }
+}
 
-//     int i = 0;
-
-//     for (i = 0; i < imageSize; i++)
-//     {
-//         inverse_red[i] = 255 - red[i];
-//         inverse_green[i] = 255 - green[i];
-//         inverse_blue[i] = 255 - blue[i];
-//     }
-
-//     return inverse_red, inverse_green, inverse_blue;
-// }
+void free_memory(int **image, int *greyScale, int *blackAndWhite, int imageSize)
+{
+    for (int i = 0; i < IMAGE_HEIGHT; i++)
+    {
+        free(image[i]);
+    }
+    free(image);
+    free(greyScale);
+    free(blackAndWhite);
+    free(red);
+    free(green);
+    free(blue);
+}
 
 int main()
 {
-    char imageFile[] = "./car.hex";
+    int **image = NULL;
+    int *greyScale = NULL;
+    int *blackAndWhite = NULL;
+    int imageSize;
 
-    int* red_inverse = malloc(imageSize * sizeof(int));
-    int* green_inverse = malloc(imageSize * sizeof(int));
-    int* blue_inverse = malloc(imageSize * sizeof(int));
+    image = hex_reader(hexImageFile, &imageSize);
+    rgb_converter(image, imageSize);
+    greyScale = grey_scale_converter(imageSize);
+    blackAndWhite = black_and_white_converter(imageSize);
+    inverse_converter(imageSize);
 
-    int* greyScale = malloc(imageSize * sizeof(int));
-    int* blackAndWhite = malloc(imageSize * sizeof(int));
-    int* inverse = malloc(imageSize * sizeof(int));
+    // Print image as a test to see if it works
+    // for (int i = 0; i < imageSize; i++)
+    // {
+    //     printf("%hhu %hhu %hhu\n", red[i], green[i], blue[i]); 
+    // }
 
-    int* image = hex_reader(imageFile);
+    // Free allocated memory
+    free_memory(image, greyScale, blackAndWhite, imageSize);
 
-    rgb_converter(image);
-    greyScale = grey_scale_converter(red, green, blue);
-    // blackAndWhite = black_and_white_converter(greyScale, imageSize);
-    // red_inverse, green_inverse, blue_inverse = inverse_converter(red, green, blue, imageSize);
-
-    // Convert the RGB values back to images and save them as .hex files
-
-    //print image as a test to see if it works
-    int i = 0;
-    for (i = 0; i < imageSize; i++)
-    {
-        printf("%x ", greyScale[i]);
-        if(i % 16 == 0)
-        {
-            printf("\n");
-        }
-    }
-    
     return 0;
 }
