@@ -1,2 +1,6 @@
 /.vscode
 opencv
+wrapper
+lodepng.c
+lodepng.h
+
