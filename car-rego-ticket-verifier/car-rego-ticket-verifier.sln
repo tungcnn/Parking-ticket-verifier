@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "car-ticket-verifier", "car-ticket-verifier.csproj", "{97732E27-10E9-4B40-9BC6-D922B2E44B42}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "car-rego-ticket-verifier", "car-rego-ticket-verifier.csproj", "{B3CADEB1-C664-4145-968C-DF399C71D31F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{97732E27-10E9-4B40-9BC6-D922B2E44B42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{97732E27-10E9-4B40-9BC6-D922B2E44B42}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{97732E27-10E9-4B40-9BC6-D922B2E44B42}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{97732E27-10E9-4B40-9BC6-D922B2E44B42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3CADEB1-C664-4145-968C-DF399C71D31F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3CADEB1-C664-4145-968C-DF399C71D31F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3CADEB1-C664-4145-968C-DF399C71D31F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3CADEB1-C664-4145-968C-DF399C71D31F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {3FE2C1F9-2E20-4C33-8E1B-A99E393C13DB}
+		SolutionGuid = {C7700512-38BE-4BBD-BAFD-0A1FFCDE79D9}
 	EndGlobalSection
 EndGlobal
