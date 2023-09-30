@@ -1,0 +1,117 @@
+body,
+h1,
+p {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url('https://www.insurethebox.com/wp-content/uploads/2018/02/bigstock-Backlit-Indoor-Car-Parking-In-4417827-1.jpg');
+    /* URL of the background image */
+    background-size: cover;
+    /* Cover the entire viewport */
+    background-repeat: no-repeat;
+    /* Do not repeat the image */
+    transition: background-color 0.3s;
+
+    /* Add blur effect to the background image */
+    backdrop-filter: blur(4px);
+}
+
+header {
+    background-color: #000;
+    /* Change header background color to black */
+    color: #fff;
+    text-align: center;
+    padding: 30px 0;
+    /* Increase the top and bottom padding */
+    width: 100%;
+    position: fixed;
+    /* Fixed position to keep the header at the top */
+    top: 0;
+    /* Position at the top */
+    z-index: 1;
+    /* Ensure the header appears above other content */
+}
+
+header h1 {
+    font-size: 40px;
+}
+
+.circle {
+    width: 350px;
+    /* Increase the width of the circle */
+    height: 350px;
+    /* Increase the height of the circle */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+    /* Default background color */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    animation: flashing 1s infinite alternate;
+    position: relative;
+}
+
+/* Add flashing rays*/
+.circle::before,
+.circle::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(white, transparent);
+    /* Define the ray gradient */
+    border-radius: 50%;
+    animation: rays 2s infinite linear;
+    /* Animation for rays */
+}
+
+/* Keyframes for the rays animation */
+@keyframes rays {
+    0% {
+        transform: rotate(0deg);
+        opacity: 0;
+    }
+
+    100% {
+        transform: rotate(360deg);
+        opacity: 1;
+    }
+}
+
+/* text inside the circle */
+#statusText {
+    font-weight: bold;
+    font-size: 24px;
+    color: #000;
+    text-align: center;
+}
+
+/* keyframes for flashing light effect */
+@keyframes flashing {
+    0% {
+        background-color: #f9f9f9;
+        transform: scale(1);
+        /* Initial scale */
+    }
+
+    100% {
+        background-color: #ff6b6b;
+        /* Flashing color for 404 status (red) */
+        transform: scale(1.05);
+        /* Slightly increase size during flashing */
+    }
+}
+
+/* Add background color for 200 status (green) */
+.circle.bg-green {
+    background-color: #6bff6b;
+}
