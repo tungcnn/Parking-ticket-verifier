@@ -1,11 +1,12 @@
 using car_rego_ticket_verifier;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<CarTicketDB>(opt => opt.UseInMemoryDatabase("CarTicketList"));
+builder.Services.AddCors();
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 var app = builder.Build();
+app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 //Seed data
 app.MapGet("/seed-car-tickets", async (CarTicketDB carTicketDb) =>
@@ -22,7 +23,7 @@ app.MapGet("/seed-car-tickets", async (CarTicketDB carTicketDb) =>
 //Verify car ticket
 app.MapGet("/verify-car-ticket", async (CarTicketDB carTicketDb) =>
 {
-    Dictionary<string, string> result = CarTicketVerifierService.extractRegoFromImage();
+    Dictionary<string, string> result = await CarTicketVerifierService.extractRegoFromImage();
 
     CarTicket? foundCarTicket = null;
 

@@ -8,25 +8,28 @@ namespace car_rego_ticket_verifier
         const string MOVE_FILE = "/C move ";
         const string MOVE_PROCESSED_FILE_TO = " ./files/processed";
         const string MOVE_ERROR_FILE_TO = " ./files/error";
-        public static Dictionary<string, string> extractRegoFromImage()
+        public async static Task<Dictionary<string, string>> extractRegoFromImage()
         {
             //Import images from FPGA
-            runTerminalCommand(COPY_FROM_FPGA_COMMAND);
+            await runTerminalCommand(COPY_FROM_FPGA_COMMAND);
 
             //Extract info from images
             return getRegoAndTicketFromImage();
         }
 
         //Helper fucntion to run terminal commands to move images around
-        private static bool runTerminalCommand(string command)
+        private async static Task runTerminalCommand(string command)
         {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = command;
-            process.StartInfo = startInfo;
-            return process.Start();
+            await Task.Run(() =>
+            {
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                startInfo.FileName = "cmd.exe";
+                startInfo.Arguments = command;
+                process.StartInfo = startInfo;
+                process.Start();
+            });
         }
 
         //Extract rego and ticket from received images

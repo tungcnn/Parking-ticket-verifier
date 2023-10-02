@@ -56,7 +56,6 @@ header h1 {
     background-color: #f9f9f9;
     /* Default background color */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    animation: flashing 1s infinite alternate;
     position: relative;
 }
 
